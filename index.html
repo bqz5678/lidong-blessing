@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>立冬 · 万物收藏</title>
+<style>
+  :root{
+    --serif: "Songti SC","STSong","Source Han Serif SC","Noto Serif SC","SimSun",serif;
+    --sans:  "PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
+    --ink:   #f4eee4;
+    --dim:   #7d776d;
+    --gold:  #cfa672;
+    --ease:  cubic-bezier(.22,.61,.36,1);
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html, body{ height:100%; overflow:hidden; }
+
+  body{
+    background:#04050a;
+    font-family:var(--sans);
+    color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  /* ───────── 底 ───────── */
+  .bg{ position:fixed; inset:0; z-index:0; background:#04050a; }
+  #scene{ position:fixed; inset:0; z-index:1; display:block; }
+
+  /* ───────── 色彩分级：暗部偏青、亮部偏暖 ───────── */
+  .grade{
+    position:fixed; inset:0; z-index:2; pointer-events:none;
+    mix-blend-mode:soft-light;
+    background:linear-gradient(178deg,
+      rgba(58,84,140,.20) 0%,
+      rgba(30,44,78,.06) 34%,
+      rgba(0,0,0,0) 54%,
+      rgba(146,88,40,.10) 78%,
+      rgba(176,96,42,.17) 100%);
+  }
+
+  /* ───────── 暗角（缓慢呼吸） ───────── */
+  .vignette{
+    position:fixed; inset:0; z-index:3; pointer-events:none;
+    background:radial-gradient(ellipse 76% 72% at 50% 47%,
+      transparent 34%,
+      rgba(2,3,7,.38) 74%,
+      rgba(2,3,7,.66) 100%);
+    animation:vigBreath 17s ease-in-out infinite;
+  }
+  @keyframes vigBreath{
+    0%,100%{ opacity:.92; }
+    50%    { opacity:1; }
+  }
+
+  /* ───────── 胶片颗粒 ───────── */
+  .grain{
+    position:fixed; inset:0; z-index:4; pointer-events:none;
+    opacity:.05; mix-blend-mode:soft-light;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.62'/%3E%3C/svg%3E");
+    background-size:180px 180px;
+  }
+
+  /* ───────── 细描边画框 ───────── */
+  .frame{
+    position:fixed; z-index:7; pointer-events:none;
+    inset:clamp(12px,2.4vmin,26px);
+    border:1px solid rgba(207,166,114,.10);
+  }
+  .frame::before, .frame::after{
+    content:''; position:absolute; width:14px; height:14px;
+    border:1px solid rgba(207,166,114,.22);
+  }
+  .frame::before{ top:-1px; left:-1px; border-right:0; border-bottom:0; }
+  .frame::after { bottom:-1px; right:-1px; border-left:0; border-top:0; }
+
+  /* ───────── 左侧竖排字栏 ───────── */
+  .rail{
+    position:fixed; left:clamp(26px,4.4vmin,50px); top:50%;
+    transform:translateY(-50%) rotate(180deg);
+    writing-mode:vertical-rl;
+    z-index:7; pointer-events:none;
+    font-family:var(--serif);
+    font-size:clamp(9px,1.9vmin,12px);
+    letter-spacing:.46em;
+    color:rgba(207,166,114,.32);
+  }
+
+  /* ───────── 主内容 ───────── */
+  .stage{
+    position:relative; z-index:6;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center;
+    padding:clamp(20px,6vh,64px) clamp(16px,6vw,60px);
+  }
+
+  [data-in]{
+    opacity:0; transform:translateY(22px); filter:blur(9px);
+    transition:
+      opacity 1.8s var(--ease),
+      transform 1.8s var(--ease),
+      filter 1.8s var(--ease);
+  }
+  [data-in].in{ opacity:1; transform:translateY(0); filter:blur(0); }
+
+  .meta{
+    font-size:clamp(9px,2.1vw,11px);
+    letter-spacing:.58em; padding-left:.58em;
+    color:var(--dim);
+    margin-bottom:clamp(16px,3.6vh,32px);
+  }
+
+  /* ── 标题组 ── */
+  .title-wrap{ position:relative; display:inline-block; }
+
+  .title-glow{
+    position:absolute; inset:0; z-index:0;
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:clamp(74px,23vw,232px);
+    line-height:1;
+    letter-spacing:.14em; padding-left:.14em;
+    color:#dfa871;
+    filter:blur(34px);
+    opacity:.30;
+    user-select:none;
+    animation:glowBreath 9s ease-in-out infinite;
+  }
+  @keyframes glowBreath{
+    0%,100%{ opacity:.24; }
+    50%    { opacity:.38; }
+  }
+
+  /* 标题：光带缓慢扫过 */
+  .title{
+    position:relative; z-index:1;
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:clamp(74px,23vw,232px);
+    line-height:1;
+    letter-spacing:.14em; padding-left:.14em;
+    background-image:linear-gradient(102deg,
+      #a8794a 0%, #d8b98d 18%, #f6e6cc 30%,
+      #fffdf7 37%, #f6e6cc 44%, #d8b98d 56%,
+      #a8794a 74%, #8e6238 100%);
+    background-size:260% 100%;
+    background-position:0% 0;
+    -webkit-background-clip:text; background-clip:text;
+    color:transparent;
+    animation:sweep 11s cubic-bezier(.5,0,.5,1) infinite;
+  }
+  @keyframes sweep{
+    0%   { background-position:0% 0; }
+    46%  { background-position:100% 0; }
+    100% { background-position:100% 0; }
+  }
+
+  /* ── 印章 ── */
+  .seal{
+    position:absolute; z-index:2;
+    right:0; bottom:0;
+    transform:translate(40%,20%) rotate(-4.5deg);
+    display:flex; align-items:center; justify-content:center;
+    width:clamp(30px,6.4vmin,42px);
+    height:clamp(30px,6.4vmin,42px);
+    border-radius:2px;
+    background:linear-gradient(155deg,#b5342a,#8a1f18);
+    box-shadow:
+      0 1px 3px rgba(0,0,0,.55),
+      inset 0 0 0 1px rgba(255,214,196,.14);
+    font-family:var(--serif);
+    font-size:clamp(10px,2.3vmin,14px);
+    color:#f6e8d8;
+    opacity:.88;
+    user-select:none;
+  }
+  .seal span{ writing-mode:vertical-rl; line-height:1.05; }
+
+  .latin{
+    font-size:clamp(9px,2vw,11px);
+    letter-spacing:.74em; padding-left:.74em;
+    color:var(--gold); opacity:.68;
+    margin-top:clamp(16px,3.2vh,26px);
+  }
+  .date{
+    font-size:clamp(9px,2vw,11px);
+    letter-spacing:.46em; padding-left:.46em;
+    color:var(--dim);
+    margin-top:clamp(8px,1.4vh,12px);
+  }
+
+  .rule{
+    width:min(70vw,400px); height:1px;
+    margin:clamp(24px,5vh,46px) 0 clamp(20px,4vh,34px);
+    background:linear-gradient(90deg,
+      transparent 0%, rgba(207,166,114,.30) 26%,
+      rgba(207,166,114,.30) 74%, transparent 100%);
+  }
+
+  .hou{
+    display:flex; flex-wrap:wrap;
+    align-items:center; justify-content:center;
+    gap:clamp(8px,2.4vw,20px);
+    font-family:var(--serif);
+    font-size:clamp(12px,3.2vw,17px);
+    letter-spacing:.18em;
+    color:#c6bdac;
+  }
+  .hou b{ font-weight:400; }
+  .hou i{
+    display:inline-block; width:2px; height:2px;
+    border-radius:50%; background:rgba(207,166,114,.5);
+    flex:none;
+  }
+
+  .quote{
+    margin-top:clamp(20px,3.8vh,34px);
+    max-width:min(88vw,600px);
+    min-height:2.2em;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+  }
+  .quote .q{
+    font-family:var(--serif);
+    font-size:clamp(14px,3.7vw,21px);
+    line-height:1.9;
+    letter-spacing:.08em;
+    color:#e5dbcb;
+    transition:opacity 1.2s var(--ease), transform 1.2s var(--ease);
+  }
+  .quote .src{
+    margin-top:clamp(9px,1.6vh,14px);
+    font-size:clamp(9px,2vw,11px);
+    letter-spacing:.26em; padding-left:.26em;
+    color:#605b53;
+    transition:opacity 1.2s var(--ease);
+  }
+  .quote.out .q  { opacity:0; transform:translateY(-8px); }
+  .quote.out .src{ opacity:0; }
+
+  /* ── 漂浮爱心层 ── */
+  .heart-layer{
+    position:fixed; inset:0; z-index:6;
+    pointer-events:none; overflow:hidden;
+  }
+  .float-heart{
+    position:fixed;
+    color:#ff5c93;
+    text-shadow:0 0 12px rgba(255,92,147,.65);
+    animation:heartFloat 3s ease-out forwards;
+    will-change:transform,opacity;
+    user-select:none;
+  }
+  @keyframes heartFloat{
+    0%   { transform:translate(-50%,-50%) scale(.4) rotate(0deg); opacity:0; }
+    16%  { transform:translate(-50%,-50%) scale(1.15) rotate(-8deg); opacity:1; }
+    100% { transform:translate(-50%,-190%) scale(.7) rotate(10deg); opacity:0; }
+  }
+
+  /* ── 专属称呼 ── */
+  .to{
+    display:flex; align-items:center; justify-content:center;
+    gap:clamp(12px,3vw,22px);
+    margin-top:clamp(26px,5vh,44px);
+  }
+  .to-line{
+    display:block; width:clamp(22px,7vw,54px); height:1px;
+    background:linear-gradient(90deg,transparent,rgba(207,166,114,.42));
+  }
+  .to-line:last-child{
+    background:linear-gradient(90deg,rgba(207,166,114,.42),transparent);
+  }
+  .to-name{
+    font-family:var(--serif);
+    font-size:clamp(15px,4vw,22px);
+    letter-spacing:.30em; padding-left:.30em;
+    color:#eed9b8;
+    text-shadow:0 0 22px rgba(207,166,114,.28);
+  }
+
+  /* ── 专属信笺 ── */
+  .letter{
+    margin-top:clamp(20px,3.6vh,32px);
+    max-width:min(88vw,560px);
+    text-align:left;
+  }
+  .letter-body{
+    font-family:var(--serif);
+    font-size:clamp(13px,3.5vw,18px);
+    line-height:2.05;
+    letter-spacing:.07em;
+    color:#ded3c1;
+    min-height:1em;
+    white-space:pre-wrap;      /* 关键：保留换行，否则整封信会挤成一段 */
+    word-break:break-word;
+  }
+  .letter-body .cursor{
+    display:inline-block; width:1px; height:1.05em;
+    background:#cfa672; margin-left:2px;
+    vertical-align:-0.16em;
+    animation:blink 1.05s steps(1) infinite;
+  }
+  @keyframes blink{ 0%,49%{opacity:1} 50%,100%{opacity:0} }
+
+  .letter-sign{
+    margin-top:clamp(14px,2.4vh,20px);
+    text-align:right;
+    font-family:var(--serif);
+    font-size:clamp(11px,2.8vw,14px);
+    letter-spacing:.18em;
+    color:#8d8478;
+    opacity:0;
+    transition:opacity 1.2s var(--ease);
+  }
+  .letter-sign.in{ opacity:1; }
+
+  /* ── 二维码入口按钮 ── */
+  .qr-btn{
+    position:fixed;
+    right:max(16px,3.6vw); bottom:max(52px,9vh);
+    z-index:8;
+    display:flex; align-items:center; gap:8px;
+    padding:9px 15px;
+    border:1px solid rgba(207,166,114,.26);
+    border-radius:100px;
+    background:rgba(12,12,16,.62);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    color:#d8c6a6;
+    font-family:var(--sans);
+    font-size:clamp(10px,2.4vw,12px);
+    letter-spacing:.16em;
+    cursor:pointer;
+    opacity:0; transform:translateY(10px);
+    pointer-events:none;
+    transition:opacity 1.2s var(--ease), transform 1.2s var(--ease),
+               border-color .35s ease, background .35s ease;
+  }
+  .qr-btn.in{ opacity:1; transform:translateY(0); pointer-events:auto; }
+  .qr-btn:hover{ border-color:rgba(207,166,114,.5); background:rgba(22,20,24,.78); }
+
+  .qr-ico{
+    width:12px; height:12px; flex:none;
+    background:
+      linear-gradient(#d8c6a6,#d8c6a6) 0 0/5px 5px no-repeat,
+      linear-gradient(#d8c6a6,#d8c6a6) 7px 0/5px 5px no-repeat,
+      linear-gradient(#d8c6a6,#d8c6a6) 0 7px/5px 5px no-repeat,
+      linear-gradient(#d8c6a6,#d8c6a6) 7px 7px/5px 5px no-repeat;
+    opacity:.8;
+  }
+
+  /* ── 二维码卡片 ── */
+  .qr-wrap{
+    position:fixed; inset:0; z-index:9;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(4,5,10,.82);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    opacity:0; pointer-events:none;
+    transition:opacity .55s var(--ease);
+  }
+  .qr-wrap.show{ opacity:1; pointer-events:auto; }
+
+  .qr-card{
+    display:flex; flex-direction:column; align-items:center;
+    gap:clamp(12px,2.6vh,20px);
+    padding:clamp(18px,4vw,30px);
+    max-width:92vw;
+    background:linear-gradient(168deg,#fbf6ec,#efe4d0);
+    border-radius:6px;
+    box-shadow:
+      0 24px 70px rgba(0,0,0,.62),
+      0 0 0 1px rgba(255,255,255,.06),
+      inset 0 0 0 1px rgba(150,120,80,.14);
+    transform:scale(.94);
+    transition:transform .55s var(--ease);
+  }
+  .qr-wrap.show .qr-card{ transform:scale(1); }
+
+  #qrCv{
+    width:clamp(180px,54vw,260px);
+    height:clamp(180px,54vw,260px);
+    display:block;
+    image-rendering:pixelated;
+  }
+  .qr-cap{
+    font-family:var(--serif);
+    font-size:clamp(10px,2.6vw,13px);
+    letter-spacing:.18em;
+    color:#6d6152;
+  }
+
+  .tip{
+    position:fixed; left:0; right:0;
+    bottom:max(14px,3vh); z-index:7;
+    text-align:center; pointer-events:none;
+    font-size:clamp(9px,1.9vw,10px);
+    letter-spacing:.38em; padding-left:.38em;
+    color:#4a4640;
+    transition:opacity 2s ease;
+  }
+  .tip.fade{ opacity:0; }
+
+  /* 微信内打开兜底提示 */
+  .wechat-hint{
+    position:fixed; left:0; right:0;
+    bottom:max(34px,6vh); z-index:7;
+    text-align:center; pointer-events:none;
+    font-family:var(--sans);
+    font-size:clamp(9px,1.9vw,10px);
+    letter-spacing:.16em;
+    color:#5a554c;
+    opacity:0;
+    transition:opacity 2s ease 6s;
+  }
+  .wechat-hint.in{ opacity:1; }
+
+  @media (max-height:620px){
+    .rule{ margin:14px 0 12px; }
+    .quote{ margin-top:12px; }
+    .meta{ margin-bottom:10px; }
+    .rail{ display:none; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition-duration:.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<canvas id="scene"></canvas>
+<div class="grade"></div>
+<div class="vignette"></div>
+<div class="grain"></div>
+<div class="frame"></div>
+<div class="rail">这个冬天 · 我想陪你过</div>
+<div class="heart-layer" id="heartLayer"></div>
+
+<main class="stage">
+  <div class="meta"  data-in>立冬 · 写给江亿攀</div>
+
+  <div class="title-wrap" data-in>
+    <div class="title-glow" aria-hidden="true">立冬</div>
+    <h1 class="title">立冬</h1>
+    <div class="seal" aria-hidden="true"><span>我爱你</span></div>
+  </div>
+
+  <div class="latin" data-in>L I D O N G</div>
+  <div class="date"  data-in>2026 · 11 · 07 · 想你</div>
+
+  <div class="rule" data-in></div>
+
+  <div class="hou" data-in>
+    <b>天渐冷</b><i></i>
+    <b>心渐暖</b><i></i>
+    <b>只因有你</b>
+  </div>
+
+  <!-- 专属称呼 -->
+  <div class="to" data-in>
+    <span class="to-line"></span>
+    <span class="to-name">江亿攀</span>
+    <span class="to-line"></span>
+  </div>
+
+  <!-- 专属信笺 -->
+  <div class="letter" data-in>
+    <div class="letter-body" id="letterBody"></div>
+    <div class="letter-sign" id="letterSign"></div>
+  </div>
+
+  <div class="quote" data-in>
+    <div class="q"></div>
+    <div class="src"></div>
+  </div>
+</main>
+
+<!-- 二维码入口 -->
+<button class="qr-btn" id="qrBtn" type="button">
+  <span class="qr-ico" aria-hidden="true"></span>
+  <span>转给江亿攀 ❤</span>
+</button>
+
+<!-- 二维码卡片 -->
+<div class="qr-wrap" id="qrWrap">
+  <div class="qr-card">
+    <canvas id="qrCv" width="360" height="360"></canvas>
+    <div class="qr-cap">长按这张图 · 把它发给我 ❤</div>
+  </div>
+</div>
+
+<div class="tip" id="tip">轻触屏幕 · 还有话想说</div>
+<div class="wechat-hint" id="wechatHint">若未自动播放，点右上角「···」选择「在浏览器打开」即可 ❤</div>
+
+<script>
+/* ═══════════ 专属内容（改这里即可） ═══════════ */
+const TO_NAME   = "江亿攀";
+const TO_FROM   = "爱你的我 ❤";
+const LETTER    = [
+  "亿攀，",
+  "立冬了，第一件事就是想到你冷不冷。",
+  "别人的冬天是加衣服，我的冬天是加想念。",
+  "想把你塞进我口袋里，风一吹我就抱紧你。",
+  "",
+  "我想跟你过很多很多个冬天：",
+  "一起吃热乎乎的饺子，一起窝在沙发里看剧，",
+  "手凉了就往你脖子里钻，脚冷了就贴着你睡。",
+  "",
+  "今天的雪是冷的，但想到你是热的。",
+  "江亿攀——",
+  "这个冬天，我要做你的暖宝宝，",
+  "做你回家时那盏亮着的灯，",
+  "还要做你以后每一个冬天的习惯。❄❤"
+];
+
+/* ═══════════ 轮播情话（更直白的浪漫） ═══════════ */
+const QUOTES = [
+  { q:"天冷了，但我一想到你，心里就是暖的。",   s:"—— 给江亿攀" },
+  { q:"想和你一起，把每个冬天都过成春天。",     s:"—— 给江亿攀" },
+  { q:"别人怕冷，我不怕，因为有你。",           s:"—— 给江亿攀" },
+  { q:"立冬到，我的想念也准时到。",             s:"—— 给江亿攀" }
+];
+
+/* ═══════════ 入场 ═══════════ */
+/* 先把称呼写进页面 */
+document.querySelector('.to-name').textContent = TO_NAME;
+
+Array.from(document.querySelectorAll('[data-in]')).forEach((el, i) => {
+  setTimeout(() => el.classList.add('in'), 420 + i * 175);
+});
+
+/* ═══════════ 名句轮换 ═══════════ */
+const qBox = document.querySelector('.quote');
+const qEl  = qBox.querySelector('.q');
+const sEl  = qBox.querySelector('.src');
+let qi = 0, qTimer = null;
+
+function showQuote(i, first){
+  const item = QUOTES[i];
+  const apply = () => {
+    qEl.textContent = item.q;
+    sEl.textContent = item.s;
+    qBox.classList.remove('out');
+  };
+  if (first){ apply(); return; }
+  qBox.classList.add('out');
+  setTimeout(apply, 1200);
+}
+function nextQuote(){
+  qi = (qi + 1) % QUOTES.length;
+  showQuote(qi, false);
+}
+function autoPlay(){
+  clearInterval(qTimer);
+  qTimer = setInterval(nextQuote, 6800);
+}
+setTimeout(() => { showQuote(0, true); autoPlay(); }, 1900);
+
+/* ═══════════ 专属信笺：逐字写出 ═══════════ */
+const letterBody = document.getElementById('letterBody');
+const letterSign = document.getElementById('letterSign');
+letterSign.textContent = TO_FROM;
+
+/* 把每行拼成一个字符流，保留换行 */
+const letterText = LETTER.join('\n');
+
+function typeLetter(){
+  let i = 0;
+  const cursor = document.createElement('span');
+  cursor.className = 'cursor';
+
+  /* 输出结构：文本节点 + 光标 */
+  letterBody.innerHTML = '';
+  const span = document.createElement('span');
+  letterBody.appendChild(span);
+  letterBody.appendChild(cursor);
+
+  (function step(){
+    if (i >= letterText.length){
+      cursor.remove();
+      letterSign.classList.add('in');
+      /* 写完后，延迟浮现二维码入口 */
+      setTimeout(() => document.getElementById('qrBtn').classList.add('in'), 2400);
+      return;
+    }
+    const ch = letterText[i++];
+    span.textContent += ch;
+
+    /* 每写完一句，飘一颗心 */
+    if (ch === '。' || ch === '❤' || ch === '❄'){
+      spawnHeartBurst();
+    }
+
+    /* 换行与标点停顿更久，读起来更像有人在写 */
+    let d = 62;
+    if (ch === '\n') d = 460;
+    else if ('，、'.includes(ch)) d = 240;
+    else if ('。'.includes(ch)) d = 420;
+    else if (ch === '—') d = 140;
+    else if (ch === '❤') d = 600;
+
+    setTimeout(step, d);
+  })();
+}
+
+/* ── 信笺上飘出的小爱心 ── */
+const heartLayer = document.getElementById('heartLayer');
+function spawnHeartBurst(){
+  const rect = letterBody.getBoundingClientRect();
+  const x = rect.left + Math.random() * rect.width;
+  const y = rect.top + Math.random() * rect.height;
+
+  const el = document.createElement('span');
+  el.className = 'float-heart';
+  el.textContent = Math.random() < 0.55 ? '❤' : '♥';
+  el.style.left = x + 'px';
+  el.style.top  = y + 'px';
+  el.style.fontSize = (10 + Math.random() * 12) + 'px';
+  el.style.animationDuration = (2.4 + Math.random() * 1.6) + 's';
+  el.style.opacity = 0.5 + Math.random() * 0.5;
+  heartLayer.appendChild(el);
+
+  setTimeout(() => el.remove(), 4200);
+}
+
+/* 等页面入场完再开始写字 */
+setTimeout(typeLetter, 2400);
+
+/* ═══════════ 二维码：使用成熟库（qrcode-generator, MIT） ═══════════ */
+/* 精简内核：仅保留 Byte 模式 + L/M/Q/H，支持 UTF-8，自动选版本、自动选最优掩码 */
+const QR = (function(){
+  /* GF(256) */
+  const EXP = new Uint8Array(512), LOG = new Uint8Array(256);
+  let x = 1;
+  for (let i = 0; i < 255; i++){
+    EXP[i] = x; LOG[x] = i;
+    x <<= 1;
+    if (x & 0x100) x ^= 0x11d;
+  }
+  for (let i = 255; i < 512; i++) EXP[i] = EXP[i - 255];
+  const gexp = n => EXP[n];
+  const glog = n => LOG[n];
+
+  function poly(pts){
+    const p = { n: pts, l: pts.length };
+    while (p.l > 0 && p.n[0] === 0){ p.n = p.n.slice(1); p.l--; }
+    return p;
+  }
+  function polyAt(p, i){ return p.n[p.l - 1 - i]; }
+  function polyMul(pa, pb){
+    const n = new Array(pa.l + pb.l - 1).fill(0);
+    for (let i = 0; i < pa.l; i++)
+      for (let j = 0; j < pb.l; j++)
+        n[i + j] ^= gexp(glog(polyAt(pa, i)) + glog(polyAt(pb, j)));
+    return poly(n);
+  }
+  function polyMod(pa, pb){
+    if (pa.l - pb.l < 0) return pa;
+    const ratio = glog(polyAt(pa, 0)) - glog(polyAt(pb, 0));
+    for (let i = 0; i < pb.l; i++)
+      pa.n[i] ^= gexp(glog(polyAt(pb, i)) + ratio);
+    return pa;
+  }
+
+  /* RS 分块表（版本 1-40，等级 L,M,Q,H） */
+  const RS = [
+    [1,26,19],[1,26,16],[1,26,13],[1,26,9],
+    [1,44,34],[1,44,28],[1,44,22],[1,44,16],
+    [1,70,55],[1,70,44],[2,35,17],[2,35,13],
+    [1,100,80],[2,50,32],[2,50,24],[4,25,9],
+    [1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],
+    [2,86,68],[4,43,27],[4,43,19],[4,43,15],
+    [2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],
+    [2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],
+    [2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],
+    [2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],
+    [4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],
+    [2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],
+    [4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],
+    [3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],
+    [5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12,7,37,13],
+    [5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],
+    [1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],
+    [5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],
+    [3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],
+    [3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],
+    [4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],
+    [2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],
+    [4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],
+    [6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],
+    [8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],
+    [10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],
+    [8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],
+    [3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],
+    [7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],
+    [5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],
+    [13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],
+    [17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],
+    [17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],
+    [13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],
+    [12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],
+    [6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],
+    [17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],
+    [4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],
+    [20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],
+    [19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]
+  ];
+  const EC_IDX = { L:0, M:1, Q:2, H:3 };
+
+  /* 对齐图案位置表（版本 1-40） */
+  const ALIGN = [
+    [],[6,18],[6,22],[6,26],[6,30],[6,34],
+    [6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],
+    [6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],
+    [6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],
+    [6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],
+    [6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],
+    [6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],
+    [6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]
+  ];
+
+  /* BCH 格式信息 */
+  const G15 = 0x537, G15_MASK = 0x5412;
+  function bchTypeInfoSafe(data){
+    let d = data << 10;
+    const gDeg = 10;
+    for (let i = 14; i >= gDeg; i--){
+      if ((d >> i) & 1) d ^= G15 << (i - gDeg);
+    }
+    return ((data << 10) | d) ^ G15_MASK;
+  }
+  function bchTypeNumber(data){
+    let d = data << 12;
+    const G18 = 0x1f25;
+    for (let i = 17; i >= 12; i--){
+      if ((d >> i) & 1) d ^= G18 << (i - 12);
+    }
+    return (data << 12) | d;
+  }
+
+  /* 掩码函数 */
+  const MASK = [
+    (i,j)=>(i+j)%2===0,
+    (i,j)=>i%2===0,
+    (i,j)=>j%3===0,
+    (i,j)=>(i+j)%3===0,
+    (i,j)=>(Math.floor(i/2)+Math.floor(j/3))%2===0,
+    (i,j)=>((i*j)%2+(i*j)%3)===0,
+    (i,j)=>(((i*j)%2+(i*j)%3)%2)===0,
+    (i,j)=>(((i*j)%3+(i+j)%2)%2)===0
+  ];
+
+  function utf8Bytes(str){
+    const out = [];
+    for (let i = 0; i < str.length; i++){
+      let c = str.charCodeAt(i);
+      if (c < 0x80) out.push(c);
+      else if (c < 0x800){
+        out.push(0xc0 | (c >> 6), 0x80 | (c & 63));
+      } else if (c < 0xd800 || c >= 0xe000){
+        out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));
+      } else {
+        i++;
+        c = 0x10000 + (((c & 0x3ff) << 10) | (str.charCodeAt(i) & 0x3ff));
+        out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63),
+                 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));
+      }
+    }
+    return out;
+  }
+
+  function getRSBlocks(ver, ec){
+    const row = RS[(ver - 1) * 4 + EC_IDX[ec]];
+    const list = [];
+    for (let i = 0; i < row.length; i += 3){
+      const count = row[i], total = row[i + 1], data = row[i + 2];
+      for (let j = 0; j < count; j++) list.push({ total, data });
+    }
+    return list;
+  }
+
+  function encode(text, ecLevel){
+    const ec = ecLevel || 'M';
+    const bytes = utf8Bytes(text);
+
+    /* 选版本 */
+    let ver = 0;
+    for (let v = 1; v <= 40; v++){
+      const blocks = getRSBlocks(v, ec);
+      let cap = 0;
+      for (const b of blocks) cap += b.data;
+      const lenBits = v < 10 ? 8 : 16;
+      if (4 + lenBits + bytes.length * 8 <= cap * 8){ ver = v; break; }
+    }
+    if (!ver) return null;
+
+    const blocks = getRSBlocks(ver, ec);
+    let totalData = 0;
+    for (const b of blocks) totalData += b.data;
+
+    /* 位流 */
+    const bits = [];
+    const put = (val, len) => { for (let i = len - 1; i >= 0; i--) bits.push((val >> i) & 1); };
+    put(4, 4);
+    put(bytes.length, ver < 10 ? 8 : 16);
+    for (const b of bytes) put(b, 8);
+
+    const capBits = totalData * 8;
+    if (bits.length + 4 <= capBits) put(0, 4);
+    while (bits.length % 8) bits.push(0);
+
+    const data = [];
+    for (let i = 0; i < bits.length; i += 8){
+      let v = 0;
+      for (let j = 0; j < 8; j++) v = (v << 1) | bits[i + j];
+      data.push(v);
+    }
+    const pads = [0xec, 0x11];
+    let pi = 0;
+    while (data.length < totalData) data.push(pads[pi++ % 2]);
+
+    /* 分块 + RS */
+    const dcdata = [], ecdata = [];
+    let off = 0;
+    for (const b of blocks){
+      const dc = b.data;
+      const ecCount = b.total - b.data;
+      const chunk = data.slice(off, off + dc);
+      off += dc;
+      dcdata.push(chunk);
+
+      let gen = [1];
+      for (let i = 0; i < ecCount; i++){
+        let next = new Array(gen.length + 1).fill(0);
+        for (let j = 0; j < gen.length; j++){
+          next[j] ^= gen[j];
+          next[j + 1] ^= gexp(glog(gen[j]) + i);
+        }
+        gen = next;
+      }
+      /* 多项式除法求余 */
+      const rem = chunk.slice();
+      rem.push(...new Array(ecCount).fill(0));
+      for (let i = 0; i < chunk.length; i++){
+        const factor = rem[i];
+        if (factor === 0) continue;
+        for (let j = 0; j < gen.length; j++){
+          rem[i + j] ^= gexp(glog(gen[j]) + glog(factor));
+        }
+      }
+      ecdata.push(rem.slice(rem.length - ecCount));
+    }
+
+    /* 交织 */
+    const final = [];
+    let maxDc = 0, maxEc = 0;
+    for (const d of dcdata) maxDc = Math.max(maxDc, d.length);
+    for (const e of ecdata) maxEc = Math.max(maxEc, e.length);
+    for (let i = 0; i < maxDc; i++)
+      for (const d of dcdata) if (i < d.length) final.push(d[i]);
+    for (let i = 0; i < maxEc; i++)
+      for (const e of ecdata) if (i < e.length) final.push(e[i]);
+
+    /* 建矩阵 */
+    const size = ver * 4 + 17;
+    const m = Array.from({ length: size }, () => new Array(size).fill(null));
+
+    const setFn = (r, c, v) => { if (r >= 0 && r < size && c >= 0 && c < size) m[r][c] = v; };
+
+    /* 定位 */
+    function setupFinder(row, col){
+      for (let r = -1; r <= 7; r++)
+        for (let c = -1; c <= 7; c++){
+          if (row + r < 0 || row + r >= size || col + c < 0 || col + c >= size) continue;
+          const on = (r >= 0 && r <= 6 && (c === 0 || c === 6)) ||
+                     (c >= 0 && c <= 6 && (r === 0 || r === 6)) ||
+                     (r >= 2 && r <= 4 && c >= 2 && c <= 4);
+          m[row + r][col + c] = on;
+        }
+    }
+    setupFinder(0, 0); setupFinder(0, size - 7); setupFinder(size - 7, 0);
+
+    /* 对齐 */
+    const pos = ALIGN[ver - 1];
+    for (let i = 0; i < pos.length; i++)
+      for (let j = 0; j < pos.length; j++){
+        const r = pos[i], c = pos[j];
+        if (m[r][c] !== null) continue;
+        for (let dr = -2; dr <= 2; dr++)
+          for (let dc2 = -2; dc2 <= 2; dc2++){
+            const on = Math.max(Math.abs(dr), Math.abs(dc2)) !== 1;
+            m[r + dr][c + dc2] = on;
+          }
+      }
+
+    /* 时序 */
+    for (let r = 8; r < size - 8; r++) if (m[r][6] === null) m[r][6] = r % 2 === 0;
+    for (let c = 8; c < size - 8; c++) if (m[6][c] === null) m[6][c] = c % 2 === 0;
+
+    /* 版本信息（ver >= 7） */
+    if (ver >= 7){
+      const bitsV = bchTypeNumber(ver);
+      for (let i = 0; i < 18; i++){
+        const on = ((bitsV >> i) & 1) === 1;
+        m[Math.floor(i / 3)][i % 3 + size - 8 - 3] = on;
+        m[i % 3 + size - 8 - 3][Math.floor(i / 3)] = on;
+      }
+    }
+
+    /* 掩码搜索 + 格式信息 */
+    let bestMask = 0, bestScore = Infinity;
+
+    function placeData(maskIdx){
+      /* 先把功能模块之外的 mask 重置 */
+      const maskFn = MASK[maskIdx];
+      let inc = -1, row = size - 1, bitIdx = 7, byteIdx = 0;
+      for (let col = size - 1; col > 0; col -= 2){
+        if (col === 6) col--;
+        while (true){
+          for (let c = 0; c < 2; c++){
+            if (m[row][col - c] === null){
+              let dark = false;
+              if (byteIdx < final.length)
+                dark = ((final[byteIdx] >>> bitIdx) & 1) === 1;
+              if (maskFn(row, col - c)) dark = !dark;
+              m[row][col - c] = dark;
+              bitIdx--;
+              if (bitIdx === -1){ byteIdx++; bitIdx = 7; }
+            }
+          }
+          row += inc;
+          if (row < 0 || row >= size){ row -= inc; inc = -inc; break; }
+        }
+      }
+    }
+
+    /* 记录功能位置，以便每次重算 */
+    const isFn = Array.from({ length: size }, () => new Array(size).fill(false));
+    for (let r = 0; r < size; r++)
+      for (let c = 0; c < size; c++)
+        isFn[r][c] = m[r][c] !== null;
+
+    /* 关键：格式信息区必须先占位，否则会被当成数据区写入，导致扫码错乱 */
+    for (let c = 0; c <= 8; c++) isFn[8][c] = true;                 /* 第 8 行左段 */
+    for (let c = size - 8; c < size; c++) isFn[8][c] = true;        /* 第 8 行右段 */
+    for (let r = 0; r <= 8; r++) isFn[r][8] = true;                 /* 第 8 列上段 */
+    for (let r = size - 7; r < size; r++) isFn[r][8] = true;        /* 第 8 列下段 */
+    isFn[size - 8][8] = true;                                       /* 固定暗模块 */
+
+    function writeFormat(maskIdx){
+      const data = (EC_IDX[ec] << 3) | maskIdx;
+      const bits2 = bchTypeInfoSafe(data);
+      /* 垂直 */
+      for (let i = 0; i < 15; i++){
+        const on = ((bits2 >> i) & 1) === 1;
+        if (i < 6) m[i][8] = on;
+        else if (i < 8) m[i + 1][8] = on;
+        else m[size - 15 + i][8] = on;
+      }
+      /* 水平 */
+      for (let i = 0; i < 15; i++){
+        const on = ((bits2 >> i) & 1) === 1;
+        if (i < 8) m[8][size - i - 1] = on;
+        else if (i < 9) m[8][15 - i - 1 + 1] = on;
+        else m[8][15 - i - 1] = on;
+      }
+      m[size - 8][8] = true;
+    }
+
+    function score(){
+      let s = 0;
+      /* 规则1：连续同色 */
+      for (let r = 0; r < size; r++){
+        let run = 1;
+        for (let c = 1; c < size; c++){
+          if (m[r][c] === m[r][c-1]) run++;
+          else { if (run >= 5) s += run - 2; run = 1; }
+        }
+        if (run >= 5) s += run - 2;
+      }
+      for (let c = 0; c < size; c++){
+        let run = 1;
+        for (let r = 1; r < size; r++){
+          if (m[r][c] === m[r-1][c]) run++;
+          else { if (run >= 5) s += run - 2; run = 1; }
+        }
+        if (run >= 5) s += run - 2;
+      }
+      /* 规则2：2x2 同色 */
+      for (let r = 0; r < size - 1; r++)
+        for (let c = 0; c < size - 1; c++){
+          const v = m[r][c];
+          if (v === m[r][c+1] && v === m[r+1][c] && v === m[r+1][c+1]) s += 3;
+        }
+      /* 规则3：1:1:3:1:1 图案 */
+      for (let r = 0; r < size; r++)
+        for (let c = 0; c < size - 6; c++){
+          if (m[r][c] && !m[r][c+1] && m[r][c+2] && m[r][c+3] && m[r][c+4] && !m[r][c+5] && m[r][c+6]) s += 40;
+        }
+      for (let c = 0; c < size; c++)
+        for (let r = 0; r < size - 6; r++){
+          if (m[r][c] && !m[r+1][c] && m[r+2][c] && m[r+3][c] && m[r+4][c] && !m[r+5][c] && m[r+6][c]) s += 40;
+        }
+      /* 规则4：暗色比例 */
+      let dark = 0;
+      for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) if (m[r][c]) dark++;
+      const ratio = Math.abs(dark * 100 / (size * size) - 50) / 5;
+      s += Math.floor(ratio) * 10;
+      return s;
+    }
+
+    for (let mk = 0; mk < 8; mk++){
+      /* 恢复功能区 */
+      for (let r = 0; r < size; r++)
+        for (let c = 0; c < size; c++)
+          if (isFn[r][c]) continue;
+          else m[r][c] = null;
+
+      placeData(mk);
+      writeFormat(mk);
+      const sc = score();
+      if (sc < bestScore){ bestScore = sc; bestMask = mk; }
+    }
+
+    /* 用最优掩码最终生成 */
+    for (let r = 0; r < size; r++)
+      for (let c = 0; c < size; c++)
+        if (!isFn[r][c]) m[r][c] = null;
+    placeData(bestMask);
+    writeFormat(bestMask);
+
+    return { m, size };
+  }
+
+  return { encode };
+})();
+
+/* ── 绘制二维码 ── */
+function drawQR(text){
+  const out = QR.encode(text);
+  const cvs = document.getElementById('qrCv');
+  const c = cvs.getContext('2d');
+  const S = cvs.width;
+
+  c.fillStyle = '#fbf6ec';
+  c.fillRect(0, 0, S, S);
+
+  if (!out){
+    c.fillStyle = '#8a7a66';
+    c.font = '16px sans-serif';
+    c.textAlign = 'center';
+    c.fillText('生成失败', S / 2, S / 2);
+    return;
+  }
+
+  const { m, size } = out;
+  const quiet = 4;
+  const n = size + quiet * 2;
+
+  /* 用整数格宽，避免模块间出现 1px 缝隙导致扫不出 */
+  const cell = Math.floor(S / n);
+  const offset = Math.floor((S - cell * n) / 2);
+
+  c.fillStyle = '#1c1814';
+  for (let y = 0; y < size; y++)
+    for (let x = 0; x < size; x++)
+      if (m[y][x]){
+        c.fillRect(
+          offset + (x + quiet) * cell,
+          offset + (y + quiet) * cell,
+          cell, cell
+        );
+      }
+}
+
+/* 二维码内容：页面若在线则用网址；本地打开则读取 URL 参数 ?u= 或使用默认文案 */
+function qrPayload(){
+  const q = new URLSearchParams(location.search).get('u');
+  if (q) return q;
+  if (/^https?:/i.test(location.href)) return location.href;
+  return '立冬 · 江亿攀：万物收藏，愿你三冬暖，岁岁平安。';
+}
+
+/* 生成失败时自动降级为短文案，保证一定有码可扫 */
+(function initQr(){
+  try {
+    drawQR(qrPayload());
+  } catch (err){
+    try {
+      drawQR('立冬 · 万物收藏');
+    } catch (e2){ /* 静默 */ }
+  }
+})();
+
+/* ── 二维码浮层 ── */
+const qrWrap = document.getElementById('qrWrap');
+function toggleQr(show){
+  qrWrap.classList.toggle('show', show === undefined ? !qrWrap.classList.contains('show') : show);
+}
+qrWrap.addEventListener('click', () => toggleQr(false));
+
+/* 入口按钮 */
+const qrBtn = document.getElementById('qrBtn');
+qrBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  toggleQr(true);
+});
+
+/* ═══════════ 场景 ═══════════ */
+const cv  = document.getElementById('scene');
+const ctx = cv.getContext('2d');
+
+const farCv  = document.createElement('canvas');
+const farCtx = farCv.getContext('2d');
+const nearCv  = document.createElement('canvas');
+const nearCtx = nearCv.getContext('2d');
+
+let W = 0, H = 0, DPR = 1;
+const moon = { x:0, y:0, r:0 };
+
+/* ── 四层山（含山顶积雪带参数） ── */
+const RIDGES = [
+  { base:0.640, a1:0.050, f1:1.15, p1:0.70, a2:0.023, f2:2.65, p2:2.10, a3:0.010, f3:5.40, p3:4.40,
+    top:'#1d2333', bot:'#2b3448', rim:0.10, snow:0.075, snowA:0.052 },
+  { base:0.712, a1:0.060, f1:1.45, p1:2.30, a2:0.029, f2:3.30, p2:0.40, a3:0.013, f3:6.20, p3:1.70,
+    top:'#141a28', bot:'#222b3c', rim:0.065, snow:0.055, snowA:0.036 },
+  { base:0.792, a1:0.048, f1:1.85, p1:5.10, a2:0.025, f2:3.90, p2:3.30, a3:0.012, f3:7.10, p3:2.90,
+    top:'#0c1019', bot:'#161c29', rim:0.034, snow:0.035, snowA:0.020 },
+  { base:0.892, a1:0.036, f1:1.30, p1:1.10, a2:0.018, f2:2.90, p2:5.20, a3:0.009, f3:6.40, p3:0.80,
+    top:'#07080e', bot:'#0c1017', rim:0.014, snow:0, snowA:0 }
+];
+
+/* ── 星空 ── */
+function buildStars(){
+  return Array.from({ length: 64 }, () => ({
+    x: Math.random(),
+    y: Math.random() * 0.56,
+    r: Math.random() * 0.85 + 0.20,
+    a: Math.random() * 0.32 + 0.05
+  }));
+}
+
+/* ── 山脊采样 ── */
+function ridgePath(cfg){
+  const pts = [];
+  for (let x = 0; x <= W; x += 4){
+    const nx = x / W;
+    const ny = cfg.base
+      + Math.sin(nx * Math.PI * 2 * cfg.f1 + cfg.p1) * cfg.a1
+      + Math.sin(nx * Math.PI * 2 * cfg.f2 + cfg.p2) * cfg.a2
+      + Math.sin(nx * Math.PI * 2 * cfg.f3 + cfg.p3) * cfg.a3;
+    pts.push([x, ny * H]);
+  }
+  return pts;
+}
+
+function drawRidge(c, cfg){
+  const pts = ridgePath(cfg);
+
+  /* 山体 */
+  c.beginPath();
+  c.moveTo(pts[0][0], pts[0][1]);
+  for (let i = 1; i < pts.length; i++) c.lineTo(pts[i][0], pts[i][1]);
+  c.lineTo(W, H * 1.1); c.lineTo(0, H * 1.1); c.closePath();
+  const g = c.createLinearGradient(0, (cfg.base - 0.14) * H, 0, H);
+  g.addColorStop(0, cfg.top);
+  g.addColorStop(1, cfg.bot);
+  c.fillStyle = g;
+  c.fill();
+
+  /* 山顶积雪带：沿脊线向下的浅色薄层 */
+  if (cfg.snowA > 0){
+    const off = cfg.snow * H;
+    c.beginPath();
+    c.moveTo(pts[0][0], pts[0][1]);
+    for (let i = 1; i < pts.length; i++) c.lineTo(pts[i][0], pts[i][1]);
+    for (let i = pts.length - 1; i >= 0; i--) c.lineTo(pts[i][0], pts[i][1] + off);
+    c.closePath();
+    c.fillStyle = `rgba(216,230,252,${cfg.snowA})`;
+    c.fill();
+  }
+
+  /* 山脊月光痕 */
+  c.beginPath();
+  c.moveTo(pts[0][0], pts[0][1]);
+  for (let i = 1; i < pts.length; i++) c.lineTo(pts[i][0], pts[i][1]);
+  c.strokeStyle = `rgba(206,220,248,${cfg.rim})`;
+  c.lineWidth = 1.1;
+  c.lineJoin = 'round';
+  c.stroke();
+}
+
+/* ── 远层：天空 / 星 / 月 ── */
+function buildFar(){
+  farCv.width  = W * DPR;
+  farCv.height = H * DPR;
+  farCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  farCtx.clearRect(0, 0, W, H);
+
+  const sky = farCtx.createLinearGradient(0, 0, 0, H);
+  sky.addColorStop(0,    '#05070d');
+  sky.addColorStop(0.32, '#080b13');
+  sky.addColorStop(0.58, '#0e1020');
+  sky.addColorStop(0.80, '#171320');
+  sky.addColorStop(1,    '#1d1611');
+  farCtx.fillStyle = sky;
+  farCtx.fillRect(0, 0, W, H);
+
+  for (const s of buildStars()){
+    farCtx.globalAlpha = s.a;
+    farCtx.fillStyle = '#dfe9ff';
+    farCtx.beginPath();
+    farCtx.arc(s.x * W, s.y * H, s.r, 0, 7);
+    farCtx.fill();
+  }
+  farCtx.globalAlpha = 1;
+
+  const mx = W * 0.755, my = H * 0.175;
+  const mr = Math.max(W, H) * 0.040;
+  moon.x = mx; moon.y = my; moon.r = mr;
+
+  /* 月晕 */
+  const halo = farCtx.createRadialGradient(mx, my, 0, mx, my, mr * 9);
+  halo.addColorStop(0,    'rgba(200,216,248,.12)');
+  halo.addColorStop(0.28, 'rgba(178,198,238,.052)');
+  halo.addColorStop(0.60, 'rgba(160,182,230,.016)');
+  halo.addColorStop(1,    'rgba(150,172,224,0)');
+  farCtx.fillStyle = halo;
+  farCtx.fillRect(mx - mr * 9, my - mr * 9, mr * 18, mr * 18);
+
+  /* 横向弥散（大气散射） */
+  farCtx.save();
+  farCtx.translate(mx, my);
+  farCtx.scale(1.9, 0.6);
+  const spread = farCtx.createRadialGradient(0, 0, 0, 0, 0, mr * 6.5);
+  spread.addColorStop(0,   'rgba(196,214,250,.075)');
+  spread.addColorStop(0.45,'rgba(180,200,242,.026)');
+  spread.addColorStop(1,   'rgba(170,192,236,0)');
+  farCtx.fillStyle = spread;
+  farCtx.beginPath();
+  farCtx.arc(0, 0, mr * 6.5, 0, 7);
+  farCtx.fill();
+  farCtx.restore();
+
+  /* 月盘 */
+  const disk = farCtx.createRadialGradient(
+    mx - mr * 0.26, my - mr * 0.26, mr * 0.05,
+    mx, my, mr
+  );
+  disk.addColorStop(0,   'rgba(250,253,255,.70)');
+  disk.addColorStop(0.52,'rgba(226,238,255,.50)');
+  disk.addColorStop(0.85,'rgba(198,218,252,.15)');
+  disk.addColorStop(1,   'rgba(192,212,248,0)');
+  farCtx.fillStyle = disk;
+  farCtx.beginPath();
+  farCtx.arc(mx, my, mr, 0, 7);
+  farCtx.fill();
+}
+
+/* ── 近层：山 + 山脚雾 ── */
+function buildNear(){
+  nearCv.width  = W * DPR;
+  nearCv.height = H * DPR;
+  nearCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  nearCtx.clearRect(0, 0, W, H);
+
+  for (const cfg of RIDGES) drawRidge(nearCtx, cfg);
+
+  const foot = nearCtx.createLinearGradient(0, H * 0.60, 0, H);
+  foot.addColorStop(0,    'rgba(148,160,188,0)');
+  foot.addColorStop(0.55, 'rgba(148,160,188,.028)');
+  foot.addColorStop(1,    'rgba(170,176,196,.078)');
+  nearCtx.fillStyle = foot;
+  nearCtx.fillRect(0, H * 0.60, W, H * 0.40);
+}
+
+/* ── 流动雾带 ── */
+const mists = [
+  { y:0.700, h:0.044, amp:0.009, f:0.85, sp:0.00030, a:0.024, off:Math.random() },
+  { y:0.762, h:0.060, amp:0.012, f:0.70, sp:0.00024, a:0.031, off:Math.random() },
+  { y:0.832, h:0.080, amp:0.015, f:0.55, sp:0.00019, a:0.038, off:Math.random() },
+  { y:0.910, h:0.102, amp:0.017, f:0.42, sp:0.00015, a:0.045, off:Math.random() }
+];
+
+function drawMistBand(m){
+  const yb  = m.y * H;
+  const amp = m.amp * H;
+  const x0  = -W * 0.35, x1 = W * 1.35;
+  const seg = 14;
+  const steps = Math.ceil((x1 - x0) / seg);
+
+  const topEdge = (x) => {
+    const nx = (x + m.off * W) / W;
+    return yb
+      + Math.sin(nx * Math.PI * 2 * m.f + 1.2) * amp
+      + Math.sin(nx * Math.PI * 2 * m.f * 2.3 + 4.1) * amp * 0.4;
+  };
+  const botEdge = (x) => {
+    const nx = (x + m.off * W) / W;
+    return yb + m.h * H
+      + Math.sin(nx * Math.PI * 2 * m.f + 2.8) * amp
+      + Math.sin(nx * Math.PI * 2 * m.f * 2.3 + 0.9) * amp * 0.4;
+  };
+
+  ctx.beginPath();
+  for (let i = 0; i <= steps; i++){
+    const x = x0 + i * seg;
+    i === 0 ? ctx.moveTo(x, topEdge(x)) : ctx.lineTo(x, topEdge(x));
+  }
+  for (let i = steps; i >= 0; i--){
+    const x = x0 + i * seg;
+    ctx.lineTo(x, botEdge(x));
+  }
+  ctx.closePath();
+  ctx.fillStyle = `rgba(174,186,212,${m.a})`;
+  ctx.fill();
+}
+
+/* ── 体积光：月亮向下的光束 ── */
+const RAY_N = 9;
+const rays = Array.from({ length: RAY_N }, (_, i) => ({
+  ang: (i / (RAY_N - 1) - 0.5) * 0.92,          // 以正下方为中心的扇形
+  w: 0.030 + Math.random() * 0.055,
+  len: 1.25 + Math.random() * 0.55,
+  a: 0.020 + Math.random() * 0.024,
+  ph: Math.random() * Math.PI * 2,
+  sp: 0.10 + Math.random() * 0.13
+}));
+
+function drawRays(t){
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.translate(moon.x, moon.y);
+
+  for (const r of rays){
+    const flick = 0.65 + 0.35 * Math.sin(t * r.sp + r.ph);
+    const ang = r.ang + Math.sin(t * 0.09 + r.ph) * 0.022;
+    const len = moon.r * 30 * r.len;
+    const w = len * r.w;
+
+    ctx.save();
+    ctx.rotate(ang);
+    const g = ctx.createLinearGradient(0, 0, 0, len);
+    g.addColorStop(0,    `rgba(206,222,252,${r.a * flick * 1.5})`);
+    g.addColorStop(0.35, `rgba(198,214,248,${r.a * flick * 0.62})`);
+    g.addColorStop(1,    'rgba(190,208,244,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.moveTo(-w * 0.10, 0);
+    ctx.lineTo( w * 0.10, 0);
+    ctx.lineTo( w, len);
+    ctx.lineTo(-w, len);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+  ctx.restore();
+}
+
+/* ── 远处村落灯火 ── */
+const lights = Array.from({ length: 16 }, () => ({
+  x: 0.08 + Math.random() * 0.84,
+  y: 0.795 + Math.random() * 0.10,
+  r: 1.0 + Math.random() * 1.7,
+  ph: Math.random() * Math.PI * 2,
+  sp: 0.5 + Math.random() * 1.1,
+  warm: Math.random() < 0.75
+}));
+
+function drawLights(t){
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  for (const l of lights){
+    const a = 0.30 + 0.32 * Math.abs(Math.sin(t * l.sp + l.ph));
+    const px = l.x * W, py = l.y * H;
+    const rad = l.r * 7;
+    const sp = glowSprite(l.warm ? '255,182,104' : '198,216,252', rad);
+    ctx.globalAlpha = Math.min(1, a * 3.0);
+    ctx.drawImage(sp, px - rad, py - rad, rad * 2, rad * 2);
+  }
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
+/* ── 飞鸟 ── */
+const birds = Array.from({ length: 5 }, () => ({
+  x: Math.random(),
+  y: 0.15 + Math.random() * 0.25,
+  sp: 0.000050 + Math.random() * 0.000048,
+  sz: 3.2 + Math.random() * 3.4,
+  ph: Math.random() * Math.PI * 2,
+  dir: Math.random() < 0.55 ? 1 : -1
+}));
+
+function drawBird(b, t){
+  const x = b.x * W, y = b.y * H, s = b.sz;
+  const flap = Math.sin(t * 7.2 + b.ph) * 0.5 + 0.5;
+  ctx.beginPath();
+  ctx.moveTo(x - s * b.dir, y + s * flap * 0.72);
+  ctx.quadraticCurveTo(x - s * 0.40 * b.dir, y - s * 0.40 * flap, x, y);
+  ctx.quadraticCurveTo(x + s * 0.40 * b.dir, y - s * 0.40 * flap, x + s * b.dir, y + s * flap * 0.72);
+  ctx.strokeStyle = 'rgba(186,201,230,.26)';
+  ctx.lineWidth = Math.max(0.85, s * 0.14);
+  ctx.lineCap = 'round';
+  ctx.stroke();
+}
+
+/* ── 光点精灵缓存：避免每帧重建渐变（手机端性能关键） ── */
+const spriteCache = new Map();
+function glowSprite(rgb, radius){
+  /* 半径量化到 4px 档，保证缓存真能命中 */
+  const q = Math.max(4, Math.round(radius / 4) * 4);
+  const key = rgb + '|' + q;
+  if (spriteCache.has(key)) return spriteCache.get(key);
+
+  const size = q * 2 + 2;
+  const c = document.createElement('canvas');
+  c.width = c.height = size;
+  const g = c.getContext('2d');
+
+  const grd = g.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, q);
+  grd.addColorStop(0,    `rgba(${rgb},1)`);
+  grd.addColorStop(0.30, `rgba(${rgb},0.34)`);
+  grd.addColorStop(0.62, `rgba(${rgb},0.10)`);
+  grd.addColorStop(1,    `rgba(${rgb},0)`);
+  g.fillStyle = grd;
+  g.fillRect(0, 0, size, size);
+
+  spriteCache.set(key, c);
+  return c;
+}
+
+/* ── 景深：前景虚化光斑（bokeh） ── */
+const bokeh = Array.from({ length: 13 }, () => ({
+  x: Math.random(),
+  y: Math.random(),
+  r: 16 + Math.random() * 46,
+  vy: (0.006 + Math.random() * 0.016) / 100,
+  vx: (Math.random() - 0.5) * 0.00012,
+  a: 0.014 + Math.random() * 0.026,
+  ph: Math.random() * Math.PI * 2
+}));
+
+function drawBokeh(t, dt){
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  for (const b of bokeh){
+    b.y -= b.vy * dt;
+    b.x += b.vx * dt;
+    if (b.y < -0.15){ b.y = 1.15; b.x = Math.random(); }
+    if (b.x > 1.1) b.x = -0.1;
+    if (b.x < -0.1) b.x = 1.1;
+
+    const nx = b.x * W, ny = b.y * H;
+    const pulse = 0.72 + 0.28 * Math.sin(t * 0.42 + b.ph);
+    const sp = glowSprite('212,226,252', b.r);
+    ctx.globalAlpha = Math.min(1, b.a * pulse * 3.2);
+    ctx.drawImage(sp, nx - b.r, ny - b.r, b.r * 2, b.r * 2);
+  }
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
+/* ── 极细雪粒 ── */
+let flakes = [];
+function buildFlakes(){
+  flakes = Array.from({ length: 170 }, () => ({
+    x:  Math.random(),
+    y:  Math.random(),
+    r:  Math.random() * 0.95 + 0.18,
+    vy: (Math.random() * 0.58 + 0.18) / 1000,
+    vx: (Math.random() - 0.5) * 0.00020,
+    a:  Math.random() * 0.28 + 0.08,
+    ph: Math.random() * Math.PI * 2
+  }));
+}
+
+/* ── 飘落的爱心（浪漫点缀） ── */
+let petals = [];
+function buildPetals(){
+  petals = Array.from({ length: 22 }, () => makePetal(true));
+}
+function makePetal(spread){
+  return {
+    x: Math.random(),
+    y: spread ? Math.random() : -0.06,
+    r: 3.5 + Math.random() * 7,                    /* 像素半径 */
+    vy: (6 + Math.random() * 8) / 10000,           /* 归一化 / 帧，约 12-25 秒落一屏 */
+    vx: (Math.random() - 0.5) * 0.00035,
+    rot: Math.random() * Math.PI * 2,
+    rotSp: (Math.random() - 0.5) * 0.03,
+    ph: Math.random() * Math.PI * 2,
+    a: 0.10 + Math.random() * 0.26,
+    hue: 330 + Math.random() * 22
+  };
+}
+
+/* 画一颗小爱心 */
+function drawSmallHeart(px, py, r, rot, hue, alpha){
+  ctx.save();
+  ctx.translate(px, py);
+  ctx.rotate(rot);
+  ctx.scale(r / 16, r / 16);
+  ctx.beginPath();
+  for (let a = 0; a <= Math.PI * 2 + 0.06; a += 0.22){
+    const x = 16 * Math.pow(Math.sin(a), 3);
+    const y = -(13 * Math.cos(a) - 5 * Math.cos(2*a) - 2 * Math.cos(3*a) - Math.cos(4*a));
+    if (a === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = `hsla(${hue},92%,72%,${alpha})`;
+  ctx.shadowBlur = r * 1.6;
+  ctx.shadowColor = `hsla(${hue},92%,66%,${alpha * 0.9})`;
+  ctx.fill();
+  ctx.restore();
+}
+
+/* ── 视差 ── */
+let pxT = 0, pyT = 0, pxC = 0, pyC = 0;
+addEventListener('pointermove', (e) => {
+  pxT = (e.clientX / W - 0.5) * 2;
+  pyT = (e.clientY / H - 0.5) * 2;
+});
+addEventListener('pointerleave', () => { pxT = 0; pyT = 0; });
+
+/* ── 尺寸 ── */
+function resize(){
+  DPR = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width  = W * DPR;
+  cv.height = H * DPR;
+  cv.style.width  = W + 'px';
+  cv.style.height = H + 'px';
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  buildFar();
+  buildNear();
+  buildFlakes();
+  buildPetals();
+}
+resize();
+addEventListener('resize', resize);
+
+/* ── 主循环 ── */
+let t = 0;
+let last = performance.now();
+const SC = 1.09;         // 视差安全放大
+let tipFaded = false;
+
+function loop(now){
+  const dt = Math.min((now - last) / 16.7, 3);
+  last = now;
+  t += 0.01 * dt;
+
+  /* 缓动视差 */
+  pxC += (pxT - pxC) * 0.035 * dt;
+  pyC += (pyT - pyC) * 0.035 * dt;
+
+  /* 极缓慢的推镜（呼吸式，约 70 秒一周期） */
+  const zoom = 1 + 0.026 * (0.5 - 0.5 * Math.cos(t * 0.09));
+
+  ctx.clearRect(0, 0, W, H);
+
+  ctx.save();
+  ctx.translate(W / 2, H / 2);
+  ctx.scale(zoom, zoom);
+  ctx.translate(-W / 2, -H / 2);
+
+  /* 远层 */
+  const farDx = -W * (SC - 1) / 2 - pxC * 4;
+  const farDy = -H * (SC - 1) / 2 - pyC * 3;
+  ctx.drawImage(farCv, farDx, farDy, W * SC, H * SC);
+
+  /* 体积光 */
+  drawRays(t);
+
+  /* 雾 */
+  for (const m of mists){
+    m.off += m.sp * dt;
+    if (m.off > 1) m.off -= 1;
+    drawMistBand(m);
+  }
+
+  /* 近层 */
+  const nearDx = -W * (SC - 1) / 2 - pxC * 11;
+  const nearDy = -H * (SC - 1) / 2 - pyC * 7;
+  ctx.drawImage(nearCv, nearDx, nearDy, W * SC, H * SC);
+
+  /* 村落灯火 */
+  drawLights(t);
+
+  /* 鸟 */
+  for (const b of birds){
+    b.x += b.sp * b.dir * dt;
+    if (b.dir > 0 && b.x > 1.15){ b.x = -0.15; b.y = 0.15 + Math.random() * 0.25; }
+    if (b.dir < 0 && b.x < -0.15){ b.x = 1.15; b.y = 0.15 + Math.random() * 0.25; }
+    drawBird(b, t);
+  }
+
+  /* 雪 */
+  for (const f of flakes){
+    f.y += f.vy * dt;
+    f.x += f.vx * dt + Math.sin(t * 1.7 + f.ph) * 0.00032 * dt;
+    if (f.y > 1.02){ f.y = -0.02; f.x = Math.random(); }
+    if (f.x > 1.02) f.x = -0.02;
+    if (f.x < -0.02) f.x = 1.02;
+
+    ctx.globalAlpha = f.a;
+    ctx.fillStyle = '#e9f1ff';
+    ctx.beginPath();
+    ctx.arc(f.x * W, f.y * H, f.r, 0, 7);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  /* 飘落的爱心（雪花之上、光斑之下） */
+  for (const p of petals){
+    p.y += p.vy * dt;
+    p.x += p.vx * dt + Math.sin(t * 0.9 + p.ph) * 0.00030 * dt;
+    p.rot += p.rotSp * dt;
+    if (p.y > 1.05){
+      Object.assign(p, makePetal(false));
+      p.y = -0.06;
+    }
+    if (p.x > 1.05) p.x = -0.05;
+    if (p.x < -0.05) p.x = 1.05;
+    drawSmallHeart(p.x * W, p.y * H, p.r, p.rot, p.hue, p.a);
+  }
+
+  /* 前景虚化光斑（最后画，压在雪之上） */
+  drawBokeh(t, dt);
+
+  ctx.restore();
+
+  /* 提示语 7 秒后淡出 */
+  if (!tipFaded && t > 7){
+    tipFaded = true;
+    document.getElementById('tip').classList.add('fade');
+    document.getElementById('wechatHint').classList.add('in');
+  }
+
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* 点击换句 */
+addEventListener('pointerdown', () => { nextQuote(); autoPlay(); });
+</script>
+</body>
+</html>
